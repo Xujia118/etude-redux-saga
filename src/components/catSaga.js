@@ -1,10 +1,15 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { getCatsSuccess } from "./catSlice";
 
+const getCats = async () => {
+  return fetch("https://api.thecatapi.com/v1/breeds").then((response) =>
+    response.json()
+  );
+}
+
 function* workGetCatsFetch() {
-  const cats = yield call(() => fetch("https://api.thecatapi.com/v1/breeds"));
-  const formattedCats = yield cats.json();
-  const topTen = formattedCats.slice(0, 10);
+  const cats = yield call(getCats);
+  const topTen = cats.slice(0, 10);
   yield put(getCatsSuccess(topTen));
 }
 
